@@ -1,0 +1,55 @@
+{
+   "ietf-mud:support-information": {
+      "last-update": "2016-05-18T20:00:50Z",
+      "cache-validity": 1440
+      },
+   "ietf-access-control-list:access-lists":  {
+     "acl": [ {
+      "acl-name": "inbound-stuff",
+      "acl-type" : "ipv4-acl",
+      "ietf-mud:direction" : "to-device",
+      "access-list-entries": {
+         "ace": [
+            {
+               "rule-name": "access-cloud",
+               "matches": {
+          "ietf-acl-dnsname:source-hostname": "http://www.columbia.edu/index.html",
+                  "protocol" : 6,
+                  "destination-port-range" : {
+                     "lower-port" : 6000,
+                     "upper-port" : 6000
+                     }
+                  },
+               "actions" : {
+                 "permit" : [null]
+                 }
+              }
+            ]
+           }
+         },
+         {
+      "acl-name": "outbound-stuff",
+      "acl-type" : "ipv4-acl",
+      "ietf-mud:direction" : "from-device",
+      "access-list-entries": {
+         "ace": [
+            {
+               "rule-name": "access-cloud",
+               "matches": {
+       "ietf-acl-dnsname:destination-hostname": "http://www.columbia.edu/index.html",
+                  "protocol" : 6,
+                  "source-port-range" : {
+                     "lower-port" : 80,
+                     "upper-port" : 80
+                     }
+                  },
+               "actions" : {
+                   "permit" : [null]
+                 }
+              }
+            ]
+           }
+         }
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+#table 0 - Access control 
+table=0,arp,nw_src=192.168.0.1,nw_dst=192.168.0.2,actions=resubmit(,1)
+table=0,arp,nw_src=192.168.0.2,nw_dst=192.168.0.1,actions=resubmit(,1)
+table=0,icmp,nw_dst=128.59.105.24,actions=resubmit(,1)
+table=0,tcp,nw_dst=128.59.105.24,tp_dst=80,actions=resubmit(,1)
+table=0,ip,nw_src=128.59.105.24,actions=resubmit(,1)
+table=0,priority=0,actions=drop
+
+#table 1 - NAT
+table=1,ip,nw_src=192.168.0.1,nw_dst=128.59.105.24,actions=mod_nw_src=192.168.1.1,resubmit(,2)
+table=1,ip,nw_src=128.59.105.24,nw_dst=192.168.1.1,actions=mod_nw_dst=192.168.0.1,resubmit(,2)
+table=1,ip,nw_src=192.168.0.2,nw_dst=128.59.105.24,actions=mod_nw_src=192.168.1.2,resubmit(,2)
+table=1,ip,nw_src=128.59.105.24,nw_dst=192.168.1.2,actions=mod_nw_dst=192.168.0.2,resubmit(,2)
+table=1,priority=0,actions=resubmit(,2)
+
+#table 2 forward/route
+table=2,ip,nw_dst=192.168.0.1,actions=mod_dl_dst=00:00:00:00:00:01,output:1
+table=2,ip,nw_dst=192.168.0.2,actions=mod_dl_dst=00:00:00:00:00:02,output:2
+table=2,ip,nw_dst=128.59.105.24,actions=mod_dl_dst=00:00:00:00:00:03,output:3
+table=2,priority=0,arp,nw_dst=192.168.0.1,actions=output:1
+table=2,priority=0,arp,nw_dst=192.168.0.2,actions=output:2
+

@@ -1,0 +1,31 @@
+demo1 is the combined mininet + mudnet sequential implementation
+demo1_1 imports Parse.py for cleaner implementation of demo 1
+
+demo2 is unfinished dynamic host addition code
+demo3 is a failed attempt at using mininet wifi with freeradius
+
+radcode is a working implementation of mininet wifi with freeradius
+
+
+demo4 is an implementation of flow tables based ACL in mininet-wifi.
+       
+    	          c0
+    	 	  |
+    Sta1---AP2---s4---AP1---IoT
+                  |
+                  AP3
+                  |
+                  Sta2
+
+
+demo5 is an implementation of flow tables based ACL with two APS and a host.
+
+      c0
+      |
+      s4------AP1-----IoT
+      / \
+     /   \
+    h1    AP2
+           \
+         cloud server
+
