@@ -70,13 +70,7 @@ def MudNet():
     print('////////////////////////')
     print('Outbound access entry: '+str(y))
     
-
-    info( '*** Creating links\n' )
-    
-
-    info( '*** Starting network\n')
-    net.start()
-    
+    net.get('h3').setIP(x[0])    
     
     h3.cmdPrint('route add default gw 128.59.105.254 h3-eth0')
     h3.cmdPrint('arp -s 128.59.105.254 00:00:00:00:33:33')
