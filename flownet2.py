@@ -57,9 +57,9 @@ def MudNet():
     hrs.cmd('sleep 15')
     hms.cmdPrint('python -m SimpleHTTPServer 80 &')
     hms.cmd('sleep 5')
-    hrc.cmdPrint('sudo echo "User-Name=Shashank, User-Password=IOTSECURITY, Columbia-MUD-URI=http://10.0.0.2/mud/lighting-example.json" | /usr/local/bin/radclient -x 10.0.0.1 auth testing123')
+    hrc.cmdPrint('sudo echo "User-Name=Merkle, User-Password=MUDinmud, Cisco-MUD-URI=http://10.0.0.2/mud/lighting-example.json" | /usr/local/bin/radclient -x 10.0.0.1 auth testingMUD')
     #s3.cmdPrint('ifconfig')
-    net.stop()
+    #net.stop()
     os.system("sleep 2")
 
 
