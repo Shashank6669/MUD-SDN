@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 """
-This code creates a network with 6 nodes as part of the fully integrated MUD-SDN architecture
+This example shows how to create an empty Mininet object
+(without a topology object) and add nodes to it manually.
 """
 
 from mininet.net import Mininet
@@ -30,9 +31,10 @@ def MudNet():
     info( '*** Adding MUD Architecture Blocks\n' )
     hrs = net.addHost( 'RadServer', ip='10.0.0.1' )
     hms = net.addHost( 'MUDServer', ip='10.0.0.2' )
-    hrc = net.addHost( 'RadClient', ip='10.0.0.3' )
+    hiot = net.addHost( 'IoT Device', ip='10.0.0.3', mac = '00:00:00:00:00:02' )
+    
     h1 = net.addHost( 'h1', ip='192.168.0.1', mac = '00:00:00:00:00:01' )  #Desktop connected to home network
-    h2 = net.addHost( 'h2', ip='192.168.0.2', mac = '00:00:00:00:00:02' )  #IoT Device LED Light connected to home network
+    #h2 = net.addHost( 'h2', ip='192.168.0.2', mac = '00:00:00:00:00:02' )  #IoT Device LED Light connected to home network
     h3 = net.addHost( 'h3', ip='', mac ='00:00:00:00:00:03' ) ####### IP address allowed for communication
 
     info( '*** Adding switch\n' )
@@ -42,10 +44,10 @@ def MudNet():
     info( '*** Creating links\n' )
     net.addLink( hrs, s3 )
     net.addLink( hms, s3 )
-    net.addLink( hrc, s3 )
+    net.addLink( hiot, s3 )
 
     net.addLink( h1, s4 )
-    net.addLink( h2, s4 )
+    #net.addLink( h2, s4 )
     net.addLink( h3, s4 ) 
 
     
@@ -56,7 +58,7 @@ def MudNet():
     hrs.cmd('sleep 15')
     hms.cmdPrint('python -m SimpleHTTPServer 80 &')
     hms.cmd('sleep 5')
-    hrc.cmdPrint('sudo echo "User-Name=Merkle, User-Password=MUDinmud, Cisco-MUD-URI=http://10.0.0.2/mud/lighting-example.json" | /usr/local/bin/radclient -x 10.0.0.1 auth testingMUD')
+    hiot.cmdPrint('sudo echo "User-Name=Merkle, User-Password=MUDinmud, Cisco-MUD-URI=http://10.0.0.2/mud/lighting-example.json" | /usr/local/bin/radclient -x 10.0.0.1 auth testingMUD')
     #s3.cmdPrint('ifconfig')
     #net.stop()
     os.system("sleep 2")
@@ -69,6 +71,11 @@ def MudNet():
     print('////////////////////////')
     print('Outbound access entry: '+str(y))
     
+    hiot.attach('hiot-eth1')
+    hiot.intf('hiot-eth1').setIP('192.168.0.2')
+    net.addLink(s4, net.get('hiot')
+    net.configLinkStatus('s3', 'hiot', 'down')
+    
     net.get('h3').setIP(x[0])    
     
     h3.cmdPrint('route add default gw 128.59.105.254 h3-eth0')
@@ -77,8 +84,8 @@ def MudNet():
     h1.cmdPrint('route add default gw 192.168.0.254 h1-eth0')
     h1.cmdPrint('arp -s 192.168.0.254 00:00:00:00:00:11:11')    
 
-    h2.cmdPrint('route add default gw 192.168.0.254 h2-eth0')
-    h2.cmdPrint('arp -s 192.168.0.254 00:00:00:00:00:11:11')
+    hiot.cmdPrint('route add default gw 192.168.0.254 hiot-eth1')
+    hiot.cmdPrint('arp -s 192.168.0.254 00:00:00:00:00:11:11')
 
     h3.cmdPrint('sudo python -m SimpleHTTPServer 80 &')
 
@@ -95,4 +102,6 @@ def MudNet():
 if __name__ == '__main__':
     setLogLevel( 'info' )
     
-MudNet()
+    MudNet()
+
+
