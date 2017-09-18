@@ -76,7 +76,7 @@ h3: Cloud server       hms: Simple HTTP server that servers up the MUD JSON file
 10) demo5 is an implementation of flow tables based ACL with two APS and a host. Does not involve the MUD architecture or parsing of MUD file.
 
                                  c0
-                                 |
+                                  |
                                  s4------AP1-----IoT
                                 / \
                                /   \
