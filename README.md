@@ -2,7 +2,7 @@
 
 This repository contains various versions of SDN topologies implemented for the IETF draft Manfacturer Usage Description acrchitecture. The SDN topologies are implemented in the network emulation software Mininet primarily and a fork of Mininet called Mininet-WiFi that includes WiFi functionalities and support for the RADIUS protocol. Mininet creates virtual linux namespaces for every node created in the network and can accurately emulate devices such as hosts, switches, routers, controllers etc. Mininet can be installed locally on Linux systems or on VMs. For more details regarding installation steps for Mininet and Mininet-WiFI, check out the following links:
 1. Mininet: https://github.com/mininet/mininet
-2: Mininet-WiFi: https://github.com/intrig-unicamp/mininet-wifi
+2. Mininet-WiFi: https://github.com/intrig-unicamp/mininet-wifi
 
 The key component of the MUD architecture is the MUD file. It is a JSON file that defines the allowed communications for an IoT node in the network in the form of inbound and outbound access entries. These entries can be used to create an Access Control List that can be used to restrict the IoT device from communicating with undesirable endpoints. The idea of the MUD architecture proposal is that each IoT device will have a MUD file that is created, signed by the OEM and is stored in a secure MUD file server. The MUD files are given a URI and can be downloaded. When an IoT device requests to join a network, it emits an EAP packet with its credentials (certificates/username-password and MUD URI) to the network access gateway. The gateway verifies the credentials of the IoT device, encapsulates the EAP packet and sends a RADIUS request to the RADIUS server. The network access gateway plays the role of a RADIUS client. The RADIUS server verifies the authenticity of the RADIUS client, and then checks the credentials of the IoT device. If the IoT device is legitimate and has a valid MUD URI, the RADIUS server invokes the MUD controller to download the MUD JSON file from the MUD file server. 
 
@@ -54,6 +54,7 @@ The flow tables for implementing the ACL for this know network topology is writt
                                         | \
                                         |  \
                                         h1  h2
+                                        
 h1: Desktop            hrc: Assumed to be the radius client since the s3 does not support RADIUS
 h2: IoT Device         hrs: RADIUS server that is linked to the MUD-controller.py script
 h3: Cloud server       hms: Simple HTTP server that servers up the MUD JSON file lighting-example.json
@@ -63,25 +64,25 @@ h3: Cloud server       hms: Simple HTTP server that servers up the MUD JSON file
 
 9) demo4 is an implementation of flow tables based ACL in mininet-wifi. Does not involve the MUD architecture or parsing of MUD file.
        
-    	           c0
-    	 	          |
-    Sta1---AP2---s4---AP1---IoT
-                  |
-                  AP3
-                  |
-                  Sta2
+    	                           c0
+    	 	                          |
+                     Sta1---AP2---s4---AP1---IoT
+                                  |
+                                 AP3
+                                  |
+                                 Sta2
 
 
 10) demo5 is an implementation of flow tables based ACL with two APS and a host. Does not involve the MUD architecture or parsing of MUD file.
 
-      c0
-      |
-      s4------AP1-----IoT
-      / \
-     /   \
-    h1    AP2
-           \
-         cloud server
+                                 c0
+                                 |
+                                 s4------AP1-----IoT
+                                / \
+                               /   \
+                              h1    AP2
+                                      \
+                                   cloud server
          
 11) radiusCode2.py is a combined implementation Freeradius and SDN using POX controller in Mininet-WiFi. It is provided by Ramon dos Reis Fontes (ramonrf@dca.fee.unicamp.br), part of the team that developed Mininet-WiFi. 
 
