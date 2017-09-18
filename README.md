@@ -65,7 +65,7 @@ h3: Cloud server       hms: Simple HTTP server that servers up the MUD JSON file
 9) demo4 is an implementation of flow tables based ACL in mininet-wifi. Does not involve the MUD architecture or parsing of MUD file.
        
     	                           c0
-    	 	                     |
+    	 	                    |
                      Sta1---AP2---s4---AP1---IoT
                                   |
                                  AP3
