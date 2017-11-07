@@ -11,10 +11,12 @@ from mininet.cli import CLI
 from mininet.log import setLogLevel, info
 
 from scapy.all import *
-import argparse
 
-def Process(packets):
+def emptyNet():
+
+    packets = rdpcap("data/android.pcap")
     nodes_ip = dict()
+
     for pkt in packets:
         if IP in pkt:
             s = pkt[IP].src
@@ -27,11 +29,6 @@ def Process(packets):
 
     n = list(nodes_ip)                #list of IP nodes
     print(n)
-    return nodes_ip,n
-
-def CaptureNet(endpts,h):
-
-    #packets = rdpcap("data/android.pcap")
 
     "Create an empty network and add nodes to it."
 
@@ -46,14 +43,13 @@ def CaptureNet(endpts,h):
     info( '*** Adding hosts\n' )
     info( '*** Creating links\n' )
     #h = [] #Empty array for hosts
-    for i in range(0,len(h)-1):
-        print(h[i])
-        i = net.addHost( str(i),ip=str(h[i]))
+    for i in range(0,len(n)-1):
+        print(n[i])
+        i = net.addHost( str(i),ip=str(n[i]))
         net.addLink( i, s3)
 
     info( '*** Starting network\n')
     net.start()
-
 
     info( '*** Running CLI\n' )
     CLI( net )
@@ -63,13 +59,4 @@ def CaptureNet(endpts,h):
 
 if __name__ == '__main__':
     setLogLevel( 'info' )
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("pcapfile", help="pcap file for traffic")
-
-    args = parser.parse_args()
-    packets = rdpcap(args.pcapfile)
-
-    endpts,h = Process(packets)
-    CaptureNet(endpts,h)
-
+    emptyNet()
