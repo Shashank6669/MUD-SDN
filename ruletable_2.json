@@ -1,0 +1,30 @@
+{
+  "priority": 10,
+  "timeout": 0,
+  "isPermanent": true,
+  "deviceId": "of:0000687f7429badf",
+  "treatment": {
+    "instructions": [
+      {
+        "type": "OUTPUT",
+        "port": "1"
+      }
+    ]
+  },
+  "selector": {
+    "criteria": [
+      {
+        "type": "IN_PORT",
+        "port": 2
+      },
+      {
+        "type": "ETH_SRC",
+        "mac": "60:E3:27:9B:44:BF"
+      },
+      {
+        "type": "ETH_DST",
+        "mac": "84:38:35:61:16:62"
+      }
+    ]
+  }
+}
