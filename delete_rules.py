@@ -8,7 +8,7 @@ base_url = 'http://192.168.0.54:8181/onos/v1'
 
 #headers = {'Content-Type':'application/json' , 'Accept':'application/json'}
 # Fetch the flows id's 
-response = requests.get(base_url + '/flows/of:5e3e486e73020629', auth=('onos', 'rocks'))
+response = requests.get('http://160.39.139.142:8181/onos/v1/flows/of%3A0000687f7429badf', auth=('onos', 'rocks'))
 rules = response.json()
 flows_ids = []
 for flow in rules['flows']:
@@ -16,6 +16,6 @@ for flow in rules['flows']:
 
 for flow_id in flows_ids:
 	print flow_id
-	response = requests.delete(base_url + '/flows/of:5e3e486e73020629/' + flow_id, auth=('onos', 'rocks'))
+	response = requests.delete('http://160.39.139.142:8181/onos/v1/flows/of%3A0000687f7429badf', auth=('onos', 'rocks'))
 	print response.status_code
 
