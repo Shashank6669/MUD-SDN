@@ -9,7 +9,7 @@ flow{
               "instructions": [
                 {
                   "type": "OUTPUT",
-                  "port": "2"
+                  "port": "15"
                 }
               ]
             },
@@ -48,7 +48,7 @@ flow{
               "criteria": [
                 {
                   "type": "IN_PORT",
-                  "port": 2
+                  "port": 15
                 },
                 {
                   "type": "ETH_SRC",
@@ -79,7 +79,7 @@ flow{
               "criteria": [
                 {
                   "type": "IN_PORT",
-                  "port": 1
+                  "port": 15
                 },
                 {
                   "type": "IPV4_SRC",

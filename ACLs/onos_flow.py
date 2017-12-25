@@ -2,7 +2,7 @@
 import requests
 import json
 import argparse
-#import flowtable
+import flowtable
 
 from requests.auth import HTTPBasicAuth
 from pprint import pprint
