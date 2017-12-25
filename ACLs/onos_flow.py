@@ -6,9 +6,10 @@ import argparse
 from requests.auth import HTTPBasicAuth
 from pprint import pprint
 
+c = 0
 
-def ACL_Blacklist(IP,ID,mac,c):
-	
+def ACL_Blacklist(IP,ID,mac):
+	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows"
 	reqURL_dev = reqURL+ID
 	print(reqURL)
@@ -49,7 +50,7 @@ def ACL_Blacklist(IP,ID,mac,c):
 			response = DEL(reqURL_dev, d)
 			print(response)
 
-
+		c++
 	
 
 
