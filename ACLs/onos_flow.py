@@ -2,11 +2,14 @@
 import requests
 import json
 import argparse
-import flowtable
+#import flowtable
+
 from requests.auth import HTTPBasicAuth
+from pprint import pprint
 
 
-def ACL(IP,ID):
+def ACL_Blacklist(IP,ID,mac):
+	
 	reqURL = "http://"+IP+":8181/onos/v1/flows"
 	reqURL_dev = reqURL+ID
 	print(reqURL)
@@ -17,9 +20,44 @@ def ACL(IP,ID):
 	print(fid)
 	print(rcode)
 	print(flows)
-	"""flowid = 18577352444689406
-	rcode = DEL(reqURL_dev,flowid)
-"""
+	
+	fid, flow, rcode = GET(reqURL)
+	
+	#print(fid)
+	#print(rcode)
+
+	#pprint(flow['flows'][2])
+	#pprint(flow)
+
+
+	#x = flow['flows'][2]['selector']['criteria'][1]['mac']    -----destination mac
+	#y = flow['flows'][2]['selector']['criteria'][2]['mac']    -----Source mac
+	
+	delete_id = []
+	#print(x)
+	for i in flow['flows']:
+		if(len(i['selector']['criteria']) == 3):
+			print(i['selector']['criteria'])
+			
+			fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
+			fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
+			
+
+			if(fmac_dst == mac or fmac_src == mac):
+				delete_id.append(i['id'])
+				
+		
+			
+		#print(i['selector']['criteria'])
+	
+	pprint(delete_id)
+
+	for d in delete_id:
+		response = DEL(reqURL_dev, d)
+		print(response)
+
+
+
 def GET(URL):
 	response = requests.get(URL, auth=('onos', 'rocks'))
 	print response.status_code
@@ -30,16 +68,15 @@ def GET(URL):
 		flow_ids.append(flow['id'])
 
 	return flow_ids, flow_resp, response.status_code
-
-
-def POST(URL, flow):
-
+	
+"""
+def POST(URL, flow_json):
 	json_rule = json.dumps(flow)
 	headers = {'Content-Type':'application/json' , 'Accept':'application/json'}
 	response = requests.post(URL, data=json_rule, auth=('onos', 'rocks'), headers=headers)
 	print response.status_code
-
 	return response.status_code
+"""
 
 def DEL(URL, flowid):
 
@@ -59,3 +96,6 @@ if __name__ == "__main__":
 	#devID = "/of%3A0000687f7429badf"
 	devID = "/of%3A0000000000000001"
 	ACL(args.ControllerIP,devID)
+	mac = "66:6A:73:35:A4:80"
+	ACL_Blacklist(args.ControllerIP,devID,mac)
+
