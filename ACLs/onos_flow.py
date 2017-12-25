@@ -87,9 +87,9 @@ if __name__ == "__main__":
 	parser.add_argument("ControllerIP",help="Specify Controller IP")
 
 	args = parser.parse_args()
-	#devID = "/of%3A0000687f7429badf"
+	devID = "/of%3A0000687f7429badf"
 	
-	devID = "/of%3A0000000000000001"
+	#devID = "/of%3A0000000000000001"
 	ACL(args.ControllerIP,devID)
 	mac = "66:6A:73:35:A4:80"
 	ACL_Blacklist(args.ControllerIP,devID,mac)
