@@ -7,7 +7,7 @@ from requests.auth import HTTPBasicAuth
 from pprint import pprint
 
 
-def ACL_Blacklist(IP,ID,mac):
+def ACL_Blacklist(IP,ID,mac,c):
 	
 	reqURL = "http://"+IP+":8181/onos/v1/flows"
 	reqURL_dev = reqURL+ID
@@ -25,29 +25,31 @@ def ACL_Blacklist(IP,ID,mac):
 
 	#x = flow['flows'][2]['selector']['criteria'][1]['mac']    -----destination mac
 	#y = flow['flows'][2]['selector']['criteria'][2]['mac']    -----Source mac
-	
 	delete_id = []
+	if (c == 0):
 
-	for i in flow['flows']:
-		if(len(i['selector']['criteria']) == 3):
-			#print(i['selector']['criteria'])
-			
-			fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
-			fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
-			
-
-			if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
-				delete_id.append(i['id'])
+		for i in flow['flows']:
+			if(len(i['selector']['criteria']) == 3):
+				#print(i['selector']['criteria'])
 				
-		
+				fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
+				fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
+				
+
+				if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
+					delete_id.append(i['id'])
+					
 			
-		#print(i['selector']['criteria'])
+				
+			#print(i['selector']['criteria'])
+		
+		pprint(delete_id)
 	
-	pprint(delete_id)
-	
-	for d in delete_id:
-		response = DEL(reqURL_dev, d)
-		print(response)
+		for d in delete_id:
+			response = DEL(reqURL_dev, d)
+			print(response)
+
+
 	
 
 
@@ -89,7 +91,7 @@ if __name__ == "__main__":
 	devID = "/of%3A0000687f7429badf"
 	
 	#devID = "/of%3A0000000000000001"
-	
+	count = 0
 	mac = "00:1F:3B:05:2A:C9"
-	ACL_Blacklist(args.ControllerIP,devID,mac)
+	ACL_Blacklist(args.ControllerIP,devID,mac, count)
 
