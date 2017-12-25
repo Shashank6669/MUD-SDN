@@ -14,12 +14,6 @@ def ACL_Blacklist(IP,ID,mac):
 	reqURL_dev = reqURL+ID
 	print(reqURL)
 	print(reqURL_dev)
-
-	fid, flow, rcode = GET(reqURL)
-
-	print(fid)
-	print(rcode)
-	print(flows)
 	
 	fid, flow, rcode = GET(reqURL)
 	
@@ -34,7 +28,7 @@ def ACL_Blacklist(IP,ID,mac):
 	#y = flow['flows'][2]['selector']['criteria'][2]['mac']    -----Source mac
 	
 	delete_id = []
-	#print(x)
+
 	for i in flow['flows']:
 		if(len(i['selector']['criteria']) == 3):
 			print(i['selector']['criteria'])
@@ -69,14 +63,14 @@ def GET(URL):
 
 	return flow_ids, flow_resp, response.status_code
 	
-"""
-def POST(URL, flow_json):
+
+def POST(URL, flow):
 	json_rule = json.dumps(flow)
 	headers = {'Content-Type':'application/json' , 'Accept':'application/json'}
 	response = requests.post(URL, data=json_rule, auth=('onos', 'rocks'), headers=headers)
 	print response.status_code
 	return response.status_code
-"""
+
 
 def DEL(URL, flowid):
 
@@ -94,6 +88,7 @@ if __name__ == "__main__":
 
 	args = parser.parse_args()
 	#devID = "/of%3A0000687f7429badf"
+	
 	devID = "/of%3A0000000000000001"
 	ACL(args.ControllerIP,devID)
 	mac = "66:6A:73:35:A4:80"
