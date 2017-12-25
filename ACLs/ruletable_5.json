@@ -1,5 +1,5 @@
 {
-  "priority": 10,
+  "priority": 20,
   "timeout": 0,
   "isPermanent": true,
   "deviceId": "of:0000687f7429badf",
@@ -15,7 +15,7 @@
     "criteria": [
       {
         "type": "IN_PORT",
-        "port": 2
+        "port": 16
       },
       {
         "type": "ETH_SRC",
@@ -23,7 +23,7 @@
       },
       {
         "type": "ETH_DST",
-        "mac": "84:38:35:61:16:62"
+        "mac": "00:1F:3B:05:2A:C9"
       }
     ]
   }

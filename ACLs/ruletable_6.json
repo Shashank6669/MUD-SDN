@@ -1,5 +1,5 @@
 {
-  "priority": 10,
+  "priority": 20,
   "timeout": 0,
   "isPermanent": true,
   "deviceId": "of:0000687f7429badf",
@@ -19,7 +19,7 @@
       },
       {
         "type": "IPV4_SRC",
-        "ip": "192.168.86.65/24"
+        "ip": "192.168.86.51/24"
       },
       {
         "type": "IPV4_DST",

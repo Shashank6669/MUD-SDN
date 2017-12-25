@@ -1,8 +1,7 @@
-#!/usr/bin/python
 import requests
 import json
 import argparse
-import flowtable
+#import flowtable
 
 from requests.auth import HTTPBasicAuth
 from pprint import pprint
@@ -31,13 +30,13 @@ def ACL_Blacklist(IP,ID,mac):
 
 	for i in flow['flows']:
 		if(len(i['selector']['criteria']) == 3):
-			print(i['selector']['criteria'])
+			#print(i['selector']['criteria'])
 			
 			fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
 			fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
 			
 
-			if(fmac_dst == mac or fmac_src == mac):
+			if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
 				delete_id.append(i['id'])
 				
 		
@@ -45,11 +44,11 @@ def ACL_Blacklist(IP,ID,mac):
 		#print(i['selector']['criteria'])
 	
 	pprint(delete_id)
-
+	
 	for d in delete_id:
 		response = DEL(reqURL_dev, d)
 		print(response)
-
+	
 
 
 def GET(URL):
@@ -90,7 +89,7 @@ if __name__ == "__main__":
 	devID = "/of%3A0000687f7429badf"
 	
 	#devID = "/of%3A0000000000000001"
-	ACL(args.ControllerIP,devID)
-	mac = "66:6A:73:35:A4:80"
+	
+	mac = "00:1F:3B:05:2A:C9"
 	ACL_Blacklist(args.ControllerIP,devID,mac)
 
