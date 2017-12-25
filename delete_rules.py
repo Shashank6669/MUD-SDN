@@ -4,7 +4,7 @@ import json
 import sys
 
 device_id = 'of:5e3e486e73020629' #pica8
-base_url = 'http://192.168.0.54:8181/onos/v1'
+base_url = 'http://160.39.139.142:8181/onos/v1'
 
 #headers = {'Content-Type':'application/json' , 'Accept':'application/json'}
 # Fetch the flows id's 

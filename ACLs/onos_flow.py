@@ -2,6 +2,7 @@
 import requests
 import json
 import argparse
+import flowtable
 from requests.auth import HTTPBasicAuth
 
 
@@ -10,9 +11,9 @@ def ACL(IP,ID):
 	reqURL_dev = reqURL+ID
 	print(reqURL)
 	print(reqURL_dev)
-	
+
 	fid, flow, rcode = GET(reqURL)
-	
+
 	print(fid)
 	print(rcode)
 	print(flows)
@@ -27,13 +28,13 @@ def GET(URL):
 	for flow in flow_resp['flows']:
 		#print('hello')
 		flow_ids.append(flow['id'])
-	
+
 	return flow_ids, flow_resp, response.status_code
-	
 
-def POST(URL, flow_json):
 
-	json_rule = flow_json
+def POST(URL, flow):
+
+	json_rule = json.dumps(flow)
 	headers = {'Content-Type':'application/json' , 'Accept':'application/json'}
 	response = requests.post(URL, data=json_rule, auth=('onos', 'rocks'), headers=headers)
 	print response.status_code
