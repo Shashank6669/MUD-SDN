@@ -71,8 +71,9 @@ def static_profile(IP,ID,mac,ip1):
 	##stop onos-app-fwd in ONOS CLI
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
-	print(reqURL)
-	print(reqURL_dev)
+	
+	#print(reqURL)
+	#print(reqURL_dev)
 	
 	fid, flow, rcode = GET(reqURL)
 
@@ -132,7 +133,7 @@ def CLEAR(reqURL,reqURL_dev):
 
 	delete_id = []
 	for i in flow['flows']:
-			if(len(i['selector']['criteria']) == 3):
+			if(len(i['selector']['criteria']) > 1):
 				delete_id.append(i['id'])
 
 	for d in delete_id:
