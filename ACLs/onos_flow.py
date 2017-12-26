@@ -72,30 +72,35 @@ def static_profile(IP,ID,ip1):
 	##stop onos-app-fwd in ONOS CLI
 	global c
 	device = devices.find_one({'ip_address':'ip1'})
-    mac = device['mac_address']
+        mac = device['mac_address']
 
-    try:
-    	acl = device['static_profile']
-    	break
-    except:
-    	print("NO static profile found for Device MAC :"+str(mac))
-    	return
-    	
-	reqURL = "http://"+IP+":8181/onos/v1/flows/"
-	reqURL_dev = reqURL+ID
+        """
+        try:
+    		acl = device['static_profile']
+    		break
+        except:
+    		print("NO static profile found for Device MAC :"+str(mac))
+    		return
+    	"""
+        if(device.has_key('static_profile')):
+		reqURL = "http://"+IP+":8181/onos/v1/flows/"
+		reqURL_dev = reqURL+ID
 
-	if(c == 0):
-		CLEAR(reqURL,reqURL_dev)
+		if(c == 0):
+			CLEAR(reqURL,reqURL_dev)
 
-  	#device = devices.find_one({'mac_address': mac})
-	dns_name = acl[0]['in']['dnsname']
-	ip2 = socket.gethostbyname(acl[0]['in']['dnsname'])
+	  	#device = devices.find_one({'mac_address': mac})
+		dns_name = acl[0]['in']['dnsname']
+		ip2 = socket.gethostbyname(acl[0]['in']['dnsname'])
 
-	
-	#Add flows according to MUD profile.
-	for f in range(3):
-		flow = S_flow(mac,ip1,ip2,f)
-		post_response = POST(reqURL_dev, flow)
+		
+		#Add flows according to MUD profile.
+		for f in range(3):
+			flow = S_flow(mac,ip1,ip2,f)
+			post_response = POST(reqURL_dev, flow)
+	else:
+		print("NO static profile found for Device MAC :"+str(mac))
+
 
 
 
@@ -118,6 +123,7 @@ def QUARANTINE(IP,ID,mac):
 	flow0 = Q_flow(mac, 0)
 	post_response0 = POST(reqURL_dev, flow0)
 	print ("Flow rule add response: "+str(post_response0))
+
 
 	flow1 = Q_flow(mac, 1)
 	post_response1 = POST(reqURL_dev, flow1)
