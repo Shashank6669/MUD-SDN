@@ -57,7 +57,7 @@ def ACL_Blacklist(IP,ID,mac,ip1, ip2):
 		flow = create_flow(mac, ip1, ip2, f)
     	post_response += POST(reqURL_dev, flow)
     
-    print(post_response) 
+        print(post_response) 
 
 def static_profile(IP,ID,mac):
 
