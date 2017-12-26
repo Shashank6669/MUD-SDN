@@ -110,20 +110,20 @@ def QUARANTINE(IP,ID,mac):
 
 	delete_id = []
 	# Delete all existing flows for the device mac
-		for i in flow['flows']:
-			if(len(i['selector']['criteria']) == 3):    
-				#print(i['selector']['criteria'])
-				
-				fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
-				fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
-				
-
-				if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
-					delete_id.append(i['id'])
-					
-			
-				
+	for i in flow['flows']:
+		if(len(i['selector']['criteria']) == 3):    
 			#print(i['selector']['criteria'])
+			
+			fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
+			fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
+			
+
+			if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
+				delete_id.append(i['id'])
+				
+		
+			
+		#print(i['selector']['criteria'])
 		
 		pprint(delete_id)
 		#Add flows to block communication to gateway.
