@@ -13,7 +13,7 @@ from mongo_ops import *
 
 c = 0
 
-
+#--------BLACKLIST SUSPICIOUS ENDPOINT BASED ON DYNAMIC PROFILING--------#
 def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
@@ -68,6 +68,8 @@ def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 
 	c = c + 1
 
+
+#-----------CREATE A WHITELIST FLOWS BASED ON MUD PROFILE------------#
 def static_profile(IP,ID,ip1):
 	##stop onos-app-fwd in ONOS CLI
 	global c
@@ -109,7 +111,7 @@ def static_profile(IP,ID,ip1):
 
 
 
-
+#-------------TAKE A PARTICULAR HOST OFF THE NETWORK---------------#
 def QUARANTINE(IP,ID,ip1):
 	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
@@ -139,7 +141,9 @@ def QUARANTINE(IP,ID,ip1):
 
     	c = c + 1
 
-def CLEAR(reqURL,reqURL_dev):
+
+#--------------CLEAR OLD FLOWS FOR NEW SESSION------------------#
+def CLEAR(reqURL,reqURL_dev):      
 
 	fid, flow, rcode = GET(reqURL)
 
@@ -152,7 +156,7 @@ def CLEAR(reqURL,reqURL_dev):
 			response = str(DEL(reqURL_dev, d))
 			print("Delete response  "+str(d)+"  :  "+response)
 
-
+#------------GET EXISTING FLOWS FROM OPENFLOW SWITCH-------------#
 def GET(URL):
 	response = requests.get(URL, auth=('onos', 'rocks'))
 	print response.status_code
@@ -164,7 +168,7 @@ def GET(URL):
 
 	return flow_ids, flow_resp, response.status_code
 
-
+#-------------------POST A FLOW TO THE OPENFLOW SWITCH------------#
 def POST(URL, flow):
 	json_rule = json.dumps(flow)
 	headers = {'Content-Type':'application/json' , 'Accept':'application/json'}
@@ -172,7 +176,7 @@ def POST(URL, flow):
 	print response.status_code
 	return response.status_code
 
-
+#----------------------DELETE A PARTICULAR FLOW ------------------#
 def DEL(URL, flowid):
 
 	url_del = URL+"/"+str(flowid)
