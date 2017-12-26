@@ -17,10 +17,11 @@ def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
+	
 	print(reqURL)
 	print(reqURL_dev)
 	
-	fid, flow, rcode = GET(reqURL)
+	#fid, flow, rcode = GET(reqURL)
 	
 	#print(fid)
 	#print(rcode)
@@ -31,29 +32,33 @@ def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 
 	#x = flow['flows'][2]['selector']['criteria'][1]['mac']    -----destination mac
 	#y = flow['flows'][2]['selector']['criteria'][2]['mac']    -----Source mac
-	delete_id = []
-	if (c == 0):
-
-		for i in flow['flows']:
-			if(len(i['selector']['criteria']) == 3):
-				#print(i['selector']['criteria'])
-				
-				fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
-				fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
-				
-				if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
-					delete_id.append(i['id'])
-					
-			
-				
-			#print(i['selector']['criteria'])
-		
-		pprint(delete_id)
 	
-		for d in delete_id:
-			response = DEL(reqURL_dev, d)
-			print(response)
+	if (c == 0):
+		CLEAR(reqURL,reqURL_dev)
 
+
+	"""
+	delete_id = []
+	for i in flow['flows']:
+		if(len(i['selector']['criteria']) == 3):
+			#print(i['selector']['criteria'])
+			
+			fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
+			fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
+			
+			if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
+				delete_id.append(i['id'])
+				
+		
+			
+		#print(i['selector']['criteria'])
+	
+	pprint(delete_id)
+
+	for d in delete_id:
+		response = DEL(reqURL_dev, d)
+		print(response)
+	"""
 
 	for f in range(3):
 		flow = create_flow(mac, ip1, ip2, f)
@@ -106,13 +111,14 @@ def static_profile(IP,ID,mac,ip1):
 """
 
 def QUARANTINE(IP,ID,mac):
+	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
 
-	fid, flow, rcode = GET(reqURL)
+	#fid, flow, rcode = GET(reqURL)
 
 	
-
+	"""
 	delete_id = []
 	# Delete all existing flows for the device mac
 	for i in flow['flows']:
@@ -128,18 +134,34 @@ def QUARANTINE(IP,ID,mac):
 				
 		#print(i['selector']['criteria'])
 		
-		pprint(delete_id)
+		#pprint(delete_id)
 		#Add flows to block communication to gateway.
+	"""
+	if(c == 0):
+		CLEAR(reqURL,reqURL_dev)
 
-		for f in range(3):
-			flow = Q_flow(mac, f)
-	    	post_response= str(POST(reqURL_dev, flow))
-	        print(post_response) 
+	for f in range(3):
+		flow = Q_flow(mac, f)
+    	post_response= str(POST(reqURL_dev, flow))
+        print("Flow rule add response: "+str(f)+" "+post_response) 
 
-"""
-def CLEAR(IP,ID):
+        c = c + 1
 
-"""
+
+def CLEAR(reqURL,reqURL_dev):
+
+	fid, flow, rcode = GET(reqURL)
+
+	delete_id = []
+	for i in flow['flows']:
+			if(len(i['selector']['criteria']) == 3):
+				delete_id.append(i['id'])
+
+	for d in delete_id:
+			response = DEL(reqURL_dev, d)
+			print("Delete response  "+str(d)+"  :  "+response)
+
+
 def GET(URL):
 	response = requests.get(URL, auth=('onos', 'rocks'))
 	print response.status_code
