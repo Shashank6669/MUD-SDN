@@ -42,7 +42,7 @@ def create_flow(mac, host1_ip, host2_ip, i):
                             "criteria": [
                               {
                                 "type": "IN_PORT",
-                                "port": 16
+                                "port": 21
                               },
                               {
                                 "type": "ETH_SRC",
