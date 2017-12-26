@@ -1,5 +1,6 @@
 from ONOS_API import CLEAR
 from ONOS_API import GET
+
 import requests
 import argparse
 

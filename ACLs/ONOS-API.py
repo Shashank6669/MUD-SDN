@@ -23,8 +23,8 @@ def ACL_Blacklist(IP,ID,ip1,ip2):
         mac = device['mac_address']
 
 		
-        ip1 += "/24"
-	ip2 += "/24"
+		ip1 += "/24"
+		ip2 += "/24"
 
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
@@ -84,12 +84,8 @@ def static_profile(IP,ID,ip1):
 	##stop onos-app-fwd in ONOS CLI
 	global c
 	device = devices.find_one({'ip_address':ip1})
-        
-	if(device is None):
-		return
         mac = device['mac_address']
-        
-        
+
         """
         try:
     		acl = device['static_profile']
@@ -99,20 +95,17 @@ def static_profile(IP,ID,ip1):
     		return
     	"""
         if(device.has_key('static_profile')):
-        ip1 += "/24"
-        
 		reqURL = "http://"+IP+":8181/onos/v1/flows/"
 		reqURL_dev = reqURL+ID
 
 		if(c == 0):
 			CLEAR(reqURL,reqURL_dev)
-		if(device['static_profile'][0].lower == 'quarantine'):
-			QUARANTINE(IP,ID,ip1)
+
 	  	#device = devices.find_one({'mac_address': mac})
 		dns_name = device['static_profile'][0]['in']['dnsname']
 		ip2 = socket.gethostbyname(dns_name)
 
-		
+		ip1 += "/24"
 		ip2 += "/24"
 
 		#Add flows according to MUD profile.
@@ -145,9 +138,7 @@ def QUARANTINE(IP,ID,ip1):
         print("Flow rule add response: "+str(f)+" "+str(post_response))
 	"""
 	device = devices.find_one({'ip_address':ip1})
-        if(device is None):
-		return
-	mac = device['mac_address']
+        mac = device['mac_address']
 
 	flow0 = Q_flow(mac, 0)
 	post_response0 = POST(reqURL_dev, flow0)
@@ -211,8 +202,9 @@ if __name__ == "__main__":
 	parser.add_argument("ControllerIP",help="Specify Controller IP")
 
 	args = parser.parse_args()
-	devID = "of%3A0000687f7429badf"
+	devID = "/of%3A0000687f7429badf"
 
 	
+
 
 	#ACL_Blacklist(args.ControllerIP,devID,mac, count)
