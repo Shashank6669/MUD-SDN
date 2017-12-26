@@ -8,7 +8,7 @@ from pprint import pprint
 
 c = 0
 
-def ACL_Blacklist(IP,ID,mac, ip1, ip2):
+def ACL_Blacklist(IP,ID,mac,ip1, ip2):
 	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows"
 	reqURL_dev = reqURL+ID
@@ -50,7 +50,7 @@ def ACL_Blacklist(IP,ID,mac, ip1, ip2):
 			response = DEL(reqURL_dev, d)
 			print(response)
 
-		c++
+		c=c+1
 
 	post_response = ''
 	for f in range(3):
