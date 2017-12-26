@@ -1,14 +1,14 @@
 import requests
 import json
 import argparse
-#import flowtable
+import flowtable
 
 from requests.auth import HTTPBasicAuth
 from pprint import pprint
 
 c = 0
 
-def ACL_Blacklist(IP,ID,mac):
+def ACL_Blacklist(IP,ID,mac, ip1, ip2):
 	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows"
 	reqURL_dev = reqURL+ID
@@ -51,7 +51,12 @@ def ACL_Blacklist(IP,ID,mac):
 			print(response)
 
 		c++
-	
+	post_response = ''
+	for f in range(3):
+		flow = create_flow(mac, ip1, ip2, f)
+    	post_response += POST(reqURL_dev, flow)
+    
+    print(post_response) 
 
 
 def GET(URL):
