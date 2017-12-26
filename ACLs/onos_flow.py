@@ -6,7 +6,7 @@ import socket
 
 from flowtable import *
 from quarantine_flow import *
-#from static_flow import *
+from static_flow import *
 from requests.auth import HTTPBasicAuth
 from pprint import pprint
 from mongo_ops import *
@@ -18,12 +18,12 @@ def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
-	
+
 	print(reqURL)
 	print(reqURL_dev)
-	
+
 	#fid, flow, rcode = GET(reqURL)
-	
+
 	#print(fid)
 	#print(rcode)
 
@@ -33,7 +33,7 @@ def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 
 	#x = flow['flows'][2]['selector']['criteria'][1]['mac']    -----destination mac
 	#y = flow['flows'][2]['selector']['criteria'][2]['mac']    -----Source mac
-	
+
 	if (c == 0):
 		CLEAR(reqURL,reqURL_dev)
 
@@ -43,17 +43,17 @@ def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 	for i in flow['flows']:
 		if(len(i['selector']['criteria']) == 3):
 			#print(i['selector']['criteria'])
-			
+
 			fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
 			fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
-			
+
 			if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
 				delete_id.append(i['id'])
-				
-		
-			
+
+
+
 		#print(i['selector']['criteria'])
-	
+
 	pprint(delete_id)
 
 	for d in delete_id:
@@ -64,14 +64,14 @@ def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 	for f in range(3):
 		flow = create_flow(mac, ip1, ip2, f)
     	post_response= str(POST(reqURL_dev, flow))
-        print(post_response) 
-	
+        print(post_response)
+
 	c = c + 1
 
 def static_profile(IP,ID,ip1):
 	##stop onos-app-fwd in ONOS CLI
 	global c
-	device = devices.find_one({'ip_address':'ip1'})
+	device = devices.find_one({'ip_address':ip1})
         mac = device['mac_address']
 
         """
@@ -90,13 +90,28 @@ def static_profile(IP,ID,ip1):
 			CLEAR(reqURL,reqURL_dev)
 
 	  	#device = devices.find_one({'mac_address': mac})
-		dns_name = acl[0]['in']['dnsname']
-		ip2 = socket.gethostbyname(acl[0]['in']['dnsname'])
+		dns_name = device['static_profile'][0]['in']['dnsname']
+		ip2 = socket.gethostbyname(dns_name)
 
-		
+		ip1 += "/24"
+		ip2 += "/24"
+
 		#Add flows according to MUD profile.
+		"""
+		print "Removed for-loop"
+		flow0 = S_flow(mac, ip1, ip2, 0)
+		print flow0
+		post_response = POST(reqURL_dev, flow0)
+		flow1 = S_flow(mac, ip1, ip2, 1)
+		print flow1
+		post_response = POST(reqURL_dev, flow1)
+		flow2 = S_flow(mac, ip1, ip2, 2)
+		print flow2
+		post_response = POST(reqURL_dev, flow2)
+		"""
 		for f in range(3):
-			flow = S_flow(mac,ip1,ip2,f)
+			flow = S_flow(mac, ip1, ip2, f)
+			print flow
 			post_response = POST(reqURL_dev, flow)
 	else:
 		print("NO static profile found for Device MAC :"+str(mac))
@@ -113,13 +128,13 @@ def QUARANTINE(IP,ID,mac):
 		CLEAR(reqURL,reqURL_dev)
 	"""
 	for f in range(2):
-		print("F is :  "+str(f)) 
+		print("F is :  "+str(f))
 		flow = Q_flow(mac, f)
 		pprint(flow)
     	post_response = POST(reqURL_dev, flow)
-        print("Flow rule add response: "+str(f)+" "+str(post_response)) 
+        print("Flow rule add response: "+str(f)+" "+str(post_response))
 	"""
-	
+
 	flow0 = Q_flow(mac, 0)
 	post_response0 = POST(reqURL_dev, flow0)
 	print ("Flow rule add response: "+str(post_response0))
@@ -155,7 +170,7 @@ def GET(URL):
 		flow_ids.append(flow['id'])
 
 	return flow_ids, flow_resp, response.status_code
-	
+
 
 def POST(URL, flow):
 	json_rule = json.dumps(flow)
@@ -181,9 +196,8 @@ if __name__ == "__main__":
 
 	args = parser.parse_args()
 	devID = "/of%3A0000687f7429badf"
-	
+
 	#devID = "/of%3A0000000000000001"
 	count = 0
 	mac = "00:1F:3B:05:2A:C9"
 	ACL_Blacklist(args.ControllerIP,devID,mac, count)
-
