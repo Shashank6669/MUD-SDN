@@ -140,7 +140,7 @@ def QUARANTINE(IP,ID,mac):
 	if(c == 0):
 		CLEAR(reqURL,reqURL_dev)
 
-	for f in range(3):
+	for f in range(2):
 		flow = Q_flow(mac, f)
     	post_response= str(POST(reqURL_dev, flow))
         print("Flow rule add response: "+str(f)+" "+post_response) 
@@ -158,7 +158,7 @@ def CLEAR(reqURL,reqURL_dev):
 				delete_id.append(i['id'])
 
 	for d in delete_id:
-			response = DEL(reqURL_dev, d)
+			response = str(DEL(reqURL_dev, d))
 			print("Delete response  "+str(d)+"  :  "+response)
 
 
