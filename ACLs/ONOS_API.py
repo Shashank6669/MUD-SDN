@@ -14,8 +14,18 @@ from mongo_ops import *
 c = 0
 
 #--------BLACKLIST SUSPICIOUS ENDPOINT BASED ON DYNAMIC PROFILING--------#
-def ACL_Blacklist(IP,ID,mac,ip1,ip2):
+def ACL_Blacklist(IP,ID,ip1,ip2):
 	global c
+	device = devices.find_one({'ip_address':ip1})
+	if(device is None):
+		return
+        
+        mac = device['mac_address']
+
+		
+        ip1 += "/24"
+	ip2 += "/24"
+
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
 
@@ -74,8 +84,12 @@ def static_profile(IP,ID,ip1):
 	##stop onos-app-fwd in ONOS CLI
 	global c
 	device = devices.find_one({'ip_address':ip1})
+        
+	if(device is None):
+		return
         mac = device['mac_address']
-
+        
+        
         """
         try:
     		acl = device['static_profile']
@@ -128,7 +142,9 @@ def QUARANTINE(IP,ID,ip1):
         print("Flow rule add response: "+str(f)+" "+str(post_response))
 	"""
 	device = devices.find_one({'ip_address':ip1})
-        mac = device['mac_address']
+        if(device is None):
+		return
+	mac = device['mac_address']
 
 	flow0 = Q_flow(mac, 0)
 	post_response0 = POST(reqURL_dev, flow0)
@@ -195,6 +211,5 @@ if __name__ == "__main__":
 	devID = "/of%3A0000687f7429badf"
 
 	
-
 
 	#ACL_Blacklist(args.ControllerIP,devID,mac, count)
