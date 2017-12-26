@@ -1,6 +1,7 @@
 import requests
 import json
 import argparse
+import socket
 
 
 from flowtable import *
@@ -11,7 +12,8 @@ from pprint import pprint
 
 c = 0
 
-def ACL_Blacklist(IP,ID,mac,ip1, ip2):
+
+def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
@@ -60,7 +62,7 @@ def ACL_Blacklist(IP,ID,mac,ip1, ip2):
 	
 	c = c + 1
 """
-def static_profile(IP,ID,mac):
+def static_profile(IP,ID,mac,ip1):
 	##stop onos-app-fwd in ONOS CLI
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
@@ -71,6 +73,9 @@ def static_profile(IP,ID,mac):
 
 	device = devices.find_one({'mac_address': mac})
 	acl = device['static_profile']
+
+	dns_name = acl[0]['in']['dnsname']
+	ip2 = socket.gethostbyname(acl[0]['in']['dnsname'])
 
 	delete_id = []
 
@@ -121,20 +126,20 @@ def QUARANTINE(IP,ID,mac):
 			if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
 				delete_id.append(i['id'])
 				
-		
-			
 		#print(i['selector']['criteria'])
 		
 		pprint(delete_id)
 		#Add flows to block communication to gateway.
 
 		for f in range(3):
-			flow = q_flow(mac, f)
+			flow = Q_flow(mac, f)
 	    	post_response= str(POST(reqURL_dev, flow))
 	        print(post_response) 
 
+"""
+def CLEAR(IP,ID):
 
-
+"""
 def GET(URL):
 	response = requests.get(URL, auth=('onos', 'rocks'))
 	print response.status_code
