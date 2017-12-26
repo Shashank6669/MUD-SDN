@@ -51,12 +51,47 @@ def ACL_Blacklist(IP,ID,mac, ip1, ip2):
 			print(response)
 
 		c++
+
 	post_response = ''
 	for f in range(3):
 		flow = create_flow(mac, ip1, ip2, f)
     	post_response += POST(reqURL_dev, flow)
     
     print(post_response) 
+
+def static_profile(IP,ID,mac):
+
+	reqURL = "http://"+IP+":8181/onos/v1/flows"
+	reqURL_dev = reqURL+ID
+	print(reqURL)
+	print(reqURL_dev)
+	
+	fid, flow, rcode = GET(reqURL)
+
+	device = devices.find_one({'mac_address': mac})
+	
+	if(device['static_profile'].lower == 'quarantine'):
+
+		delete_id = []
+		# Delete all existing flows for the device
+			for i in flow['flows']:
+				if(len(i['selector']['criteria']) == 3):    
+					#print(i['selector']['criteria'])
+					
+					fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
+					fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
+					
+
+					if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
+						delete_id.append(i['id'])
+						
+				
+					
+				#print(i['selector']['criteria'])
+			
+			pprint(delete_id)
+		#Add flows to block communication to gateway.
+
 
 
 def GET(URL):
