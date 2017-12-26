@@ -9,6 +9,7 @@ from quarantine_flow import *
 #from static_flow import *
 from requests.auth import HTTPBasicAuth
 from pprint import pprint
+from mongo_ops import *
 
 c = 0
 
@@ -66,34 +67,37 @@ def ACL_Blacklist(IP,ID,mac,ip1,ip2):
         print(post_response) 
 	
 	c = c + 1
-"""
-def static_profile(IP,ID,mac,ip1):
+
+def static_profile(IP,ID,ip1):
 	##stop onos-app-fwd in ONOS CLI
 	global c
+	device = devices.find_one({'ip_address':'ip1'})
+    mac = device['mac_address']
+
+    try:
+    	acl = device['static_profile']
+    	break
+    except:
+    	print("NO static profile found for Device MAC :"+str(mac))
+    	return
+    	
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
-	
-	#print(reqURL)
-	#print(reqURL_dev)
-	
-	fid, flow, rcode = GET(reqURL)
-
-	device = devices.find_one({'mac_address': mac})
-	acl = device['static_profile']
-
-	dns_name = acl[0]['in']['dnsname']
-	ip2 = socket.gethostbyname(acl[0]['in']['dnsname'])
 
 	if(c == 0):
 		CLEAR(reqURL,reqURL_dev)
+
+  	#device = devices.find_one({'mac_address': mac})
+	dns_name = acl[0]['in']['dnsname']
+	ip2 = socket.gethostbyname(acl[0]['in']['dnsname'])
 
 	
 	#Add flows according to MUD profile.
 	for f in range(3):
 		flow = S_flow(mac,ip1,ip2,f)
-		post_response=str(POST())
+		post_response = POST(reqURL_dev, flow)
 
-"""
+
 
 def QUARANTINE(IP,ID,mac):
 	global c
@@ -110,6 +114,7 @@ def QUARANTINE(IP,ID,mac):
     	post_response = POST(reqURL_dev, flow)
         print("Flow rule add response: "+str(f)+" "+str(post_response)) 
 	"""
+	
 	flow0 = Q_flow(mac, 0)
 	post_response0 = POST(reqURL_dev, flow0)
 	print ("Flow rule add response: "+str(post_response0))
@@ -119,7 +124,6 @@ def QUARANTINE(IP,ID,mac):
 	print ("Flow rule add response: "+str(post_response1))
 
     	c = c + 1
-
 
 def CLEAR(reqURL,reqURL_dev):
 

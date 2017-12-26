@@ -4,30 +4,8 @@ import argparse
 import socket
 
 
-from flowtable import *
-from quarantine_flow import *
-#from static_flow import *
-from requests.auth import HTTPBasicAuth
+
 from pprint import pprint
 
-def POST(URL, flow):
-        json_rule = json.dumps(flow)
-        headers = {'Content-Type':'application/json' , 'Accept':'application/json'}
-        response = requests.post(URL, data=json_rule, auth=('onos', 'rocks'), headers=headers)
-        print response.status_code
-        return response.status_code
-
-
-IP = '160.39.253.131'
-ID = '/of%3A0000687f7429badf'
-mac = '74:E5:43:1D:A5:33'
-
-reqURL = "http://"+IP+":8181/onos/v1/flows/"
-reqURL_dev = reqURL+ID
-
-for f in range(2):
-	flow = Q_flow(mac, f)
-	post_response= str(POST(reqURL_dev, flow))
-	print("Flow rule add response: "+str(f)+" "+post_response) 
-
-
+d = [{endpts': [192.168.86.62', 23.208.82.217', 17.249.124.31', 224.0.0.251', 40.97.147.210', 216.58.219.235', 216.58.219.238', 23.21.117.72', 172.217.10.66', 216.58.219.225', 216.58.212.131', 216.81.92.40', 35.201.97.85', 216.58.219.227', 172.217.11.2', 224.0.0.22', 17.154.66.73'], model_type': alexa', mac_address': 64:a5:c3:c1:ee:af', domains': [{ips': [169.55.75.113', 169.63.73.70', 169.45.248.110', 169.63.73.67', 169.53.71.247', 108.168.176.244', 169.47.42.230', 169.45.248.176'], domain': e16.whatsapp.net.'}, {ips': [outlook.office365.com.g.office365.com.', outlook-namcentral2.office365.com.', 40.97.137.146', 40.97.28.114', 40.97.124.18', 40.97.41.50', 40.97.156.98', 40.97.119.82', 40.97.113.178', 40.97.85.114', 40.97.152.34', 40.97.180.34'], domain': outlook.ha.office365.com.'}, {ips': [172.217.10.68'], domain': www.google.com.'}, {ips': [172.217.10.106', 172.217.10.138', 172.217.3.106', 172.217.12.138', 172.217.6.234', 172.217.10.234', 172.217.11.42', 172.217.12.170', 172.217.12.202', 216.58.219.234', 172.217.10.10', 172.217.10.42', 172.217.10.74'], domain': googleapis.l.google.com.'}, {ips': [settings-crashlytics-1410998606.us-east-1.elb.amazonaws.com.', 23.23.96.77', 23.23.96.14', 23.23.235.188', 50.17.205.178', 23.23.192.9', 23.23.111.85', 23.21.64.174', 23.23.235.156'], domain': settings.crashlytics.com.'}, {ips': [outlook-namcentral2.office365.com.', 40.97.152.34', 40.97.180.34', 40.97.137.146', 40.97.28.114', 40.97.124.18', 40.97.41.50', 40.97.156.98', 40.97.119.82', 40.97.113.178', 40.97.85.114'], domain': outlook.office365.com.g.office365.com.'}, {ips': [216.58.219.235'], domain': mobile.l.google.com.'}, {ips': [23.203.102.7'], domain': e673.e9.akamaiedge.net.'}], _id': ObjectId('5a3ac0a881eafc667c8ff6de'), ip_address': 192.168.86.62'}]
+pprint(d)
