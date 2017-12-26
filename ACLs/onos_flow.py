@@ -97,29 +97,20 @@ def static_profile(IP,ID,ip1):
 		ip2 += "/24"
 
 		#Add flows according to MUD profile.
-		"""
-		print "Removed for-loop"
-		flow0 = S_flow(mac, ip1, ip2, 0)
-		print flow0
-		post_response = POST(reqURL_dev, flow0)
-		flow1 = S_flow(mac, ip1, ip2, 1)
-		print flow1
-		post_response = POST(reqURL_dev, flow1)
-		flow2 = S_flow(mac, ip1, ip2, 2)
-		print flow2
-		post_response = POST(reqURL_dev, flow2)
-		"""
+		
 		for f in range(3):
 			flow = S_flow(mac, ip1, ip2, f)
 			print flow
 			post_response = POST(reqURL_dev, flow)
+			print("Flow added :"+str(f)+" "+str(post_response))
+		c = c + 1
 	else:
 		print("NO static profile found for Device MAC :"+str(mac))
 
 
 
 
-def QUARANTINE(IP,ID,mac):
+def QUARANTINE(IP,ID,ip1):
 	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
@@ -134,6 +125,8 @@ def QUARANTINE(IP,ID,mac):
     	post_response = POST(reqURL_dev, flow)
         print("Flow rule add response: "+str(f)+" "+str(post_response))
 	"""
+	device = devices.find_one({'ip_address':ip1})
+        mac = device['mac_address']
 
 	flow0 = Q_flow(mac, 0)
 	post_response0 = POST(reqURL_dev, flow0)
@@ -197,7 +190,7 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	devID = "/of%3A0000687f7429badf"
 
-	#devID = "/of%3A0000000000000001"
-	count = 0
-	mac = "00:1F:3B:05:2A:C9"
-	ACL_Blacklist(args.ControllerIP,devID,mac, count)
+	
+
+
+	#ACL_Blacklist(args.ControllerIP,devID,mac, count)
