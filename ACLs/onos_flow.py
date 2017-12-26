@@ -4,7 +4,7 @@ import argparse
 
 
 from flowtable import *
-#from quarantine_flow import *
+from quarantine_flow import *
 #from static_flow import *
 from requests.auth import HTTPBasicAuth
 from pprint import pprint
@@ -98,34 +98,34 @@ def static_profile(IP,ID,mac):
 		flow = S_flow(mac,ip1,ip2,f)
 		post_response=str(POST())
 
+"""
 
-
-def QUARANTINE(IP,ID,mac, q):
+def QUARANTINE(IP,ID,mac):
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
 
 	fid, flow, rcode = GET(reqURL)
 
-	if(q):
+	
 
-		delete_id = []
-		# Delete all existing flows for the device mac
-			for i in flow['flows']:
-				if(len(i['selector']['criteria']) == 3):    
-					#print(i['selector']['criteria'])
-					
-					fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
-					fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
-					
-
-					if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
-						delete_id.append(i['id'])
-						
-				
-					
+	delete_id = []
+	# Delete all existing flows for the device mac
+		for i in flow['flows']:
+			if(len(i['selector']['criteria']) == 3):    
 				#print(i['selector']['criteria'])
+				
+				fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
+				fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
+				
+
+				if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
+					delete_id.append(i['id'])
+					
 			
-			pprint(delete_id)
+				
+			#print(i['selector']['criteria'])
+		
+		pprint(delete_id)
 		#Add flows to block communication to gateway.
 
 		for f in range(3):
@@ -133,7 +133,7 @@ def QUARANTINE(IP,ID,mac, q):
 	    	post_response= str(POST(reqURL_dev, flow))
 	        print(post_response) 
 
-"""
+
 
 def GET(URL):
 	response = requests.get(URL, auth=('onos', 'rocks'))
