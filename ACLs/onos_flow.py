@@ -69,6 +69,7 @@ def ACL_Blacklist(IP,ID,mac,ip1,ip2):
 """
 def static_profile(IP,ID,mac,ip1):
 	##stop onos-app-fwd in ONOS CLI
+	global c
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
 	
@@ -83,26 +84,9 @@ def static_profile(IP,ID,mac,ip1):
 	dns_name = acl[0]['in']['dnsname']
 	ip2 = socket.gethostbyname(acl[0]['in']['dnsname'])
 
-	delete_id = []
+	if(c == 0):
+		CLEAR(reqURL,reqURL_dev)
 
-	# Delete all existing flows for the device
-		for i in flow['flows']:
-			if(len(i['selector']['criteria']) == 3):    
-				#print(i['selector']['criteria'])
-				
-				fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
-				fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
-
-				if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
-					delete_id.append(i['id'])
-					
-			#print(i['selector']['criteria'])
-		
-		#pprint(delete_id)
-
-		for d in delete_id:
-			response = DEL(reqURL_dev, d)
-			print(response)
 	
 	#Add flows according to MUD profile.
 	for f in range(3):
@@ -118,13 +102,23 @@ def QUARANTINE(IP,ID,mac):
 
 	if(c == 0):
 		CLEAR(reqURL,reqURL_dev)
-
+	"""
 	for f in range(2):
+		print("F is :  "+str(f)) 
 		flow = Q_flow(mac, f)
+		pprint(flow)
     	post_response = POST(reqURL_dev, flow)
         print("Flow rule add response: "+str(f)+" "+str(post_response)) 
+	"""
+	flow0 = Q_flow(mac, 0)
+	post_response0 = POST(reqURL_dev, flow0)
+	print ("Flow rule add response: "+str(post_response0))
 
-        c = c + 1
+	flow1 = Q_flow(mac, 1)
+	post_response1 = POST(reqURL_dev, flow1)
+	print ("Flow rule add response: "+str(post_response1))
+
+    	c = c + 1
 
 
 def CLEAR(reqURL,reqURL_dev):
