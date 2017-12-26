@@ -58,7 +58,7 @@ def ACL_Blacklist(IP,ID,mac,ip1, ip2):
     	post_response += POST(reqURL_dev, flow)
     
         print(post_response) 
-
+"""
 def static_profile(IP,ID,mac):
 
 	reqURL = "http://"+IP+":8181/onos/v1/flows"
@@ -93,7 +93,7 @@ def static_profile(IP,ID,mac):
 		#Add flows to block communication to gateway.
 
 
-
+"""
 def GET(URL):
 	response = requests.get(URL, auth=('onos', 'rocks'))
 	print response.status_code
