@@ -115,35 +115,13 @@ def QUARANTINE(IP,ID,mac):
 	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
 
-	#fid, flow, rcode = GET(reqURL)
-
-	
-	"""
-	delete_id = []
-	# Delete all existing flows for the device mac
-	for i in flow['flows']:
-		if(len(i['selector']['criteria']) == 3):    
-			#print(i['selector']['criteria'])
-			
-			fmac_dst = i['selector']['criteria'][1]['mac'].encode('ascii', 'ignore')
-			fmac_src = i['selector']['criteria'][2]['mac'].encode('ascii', 'ignore')
-			
-
-			if(fmac_dst.lower() == mac.lower() or fmac_src.lower() == mac.lower()):
-				delete_id.append(i['id'])
-				
-		#print(i['selector']['criteria'])
-		
-		#pprint(delete_id)
-		#Add flows to block communication to gateway.
-	"""
 	if(c == 0):
 		CLEAR(reqURL,reqURL_dev)
 
 	for f in range(2):
 		flow = Q_flow(mac, f)
-    	post_response= str(POST(reqURL_dev, flow))
-        print("Flow rule add response: "+str(f)+" "+post_response) 
+    	post_response = POST(reqURL_dev, flow)
+        print("Flow rule add response: "+str(f)+" "+str(post_response)) 
 
         c = c + 1
 
