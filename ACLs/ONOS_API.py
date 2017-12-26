@@ -99,7 +99,7 @@ def static_profile(IP,ID,ip1):
     		return
     	"""
         if(device.has_key('static_profile')):
-        ip1 += "/24"
+  	        ip1 += "/24"
         
 		reqURL = "http://"+IP+":8181/onos/v1/flows/"
 		reqURL_dev = reqURL+ID
