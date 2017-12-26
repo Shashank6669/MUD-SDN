@@ -12,7 +12,7 @@ c = 0
 
 def ACL_Blacklist(IP,ID,mac,ip1, ip2):
 	global c
-	reqURL = "http://"+IP+":8181/onos/v1/flows"
+	reqURL = "http://"+IP+":8181/onos/v1/flows/"
 	reqURL_dev = reqURL+ID
 	print(reqURL)
 	print(reqURL_dev)
